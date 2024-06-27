@@ -114,3 +114,5 @@ export const TextAreaInput: React.FC<BaseInputProps> = ({
         </TextAreaContainer>
     )
 }
+
+export { Button } from "./styles"

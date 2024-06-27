@@ -1,7 +1,7 @@
 import React from "react"
 import Head from "next/head"
 import styled from "styled-components"
-import FlightForm from "@/components/form"
+import FlightForm from "@/components/flightForm"
 
 interface HomeProp {
     className: string
@@ -39,6 +39,7 @@ export default styled(Home)`
     align-items: center;
     height: 100vh;
     .form {
+        position: relative;
         display: flex;
         flex-direction: column;
         max-width: 768px;
@@ -59,5 +60,6 @@ export default styled(Home)`
         font-size: ${({ theme }) => theme.textScale.h1};
         text-align: center;
         margin-bottom: 24px;
+        font-weight: 700;
     }
 `

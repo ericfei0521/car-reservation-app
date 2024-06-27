@@ -3,6 +3,7 @@ export interface Theme {
         error: string
         normal: string
         disable: string
+        secondary: string
     }
     border: {
         normal: string
@@ -23,6 +24,7 @@ export const theme: Theme = {
         error: "#f00",
         normal: "#000",
         disable: "#999",
+        secondary: "#262626",
     },
     border: {
         normal: "#000",

@@ -64,3 +64,22 @@ export const TextAreaContainer = styled(InputContainer)`
         }
     }
 `
+
+interface ButtonProps {
+    mode: "light" | "dark"
+}
+export const Button = styled.button<ButtonProps>`
+    width: 100%;
+    height: 50px;
+    font-size: ${({ theme }) => theme.textScale.h3};
+    border: 1px solid ${({ theme }) => theme.border.normal};
+    border-radius: 4px;
+    background-color: ${({ mode }) => (mode === "dark" ? "#4b5c6b" : "white")};
+    color: ${({ mode, theme }) =>
+        mode === "dark" ? "white" : theme.color.normal};
+    font-weight: 700;
+    &:active {
+        font-size: ${({ theme }) => theme.textScale.normal};
+        box-shadow: 1px 1px 5px ${({ theme }) => theme.color.secondary};
+    }
+`
