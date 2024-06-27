@@ -1,15 +1,15 @@
-import React from "react"
+import React, { useRef, useEffect, useState } from "react"
 import { useField, useFormikContext } from "formik"
-import { InputContainer } from "./styles"
+import { InputContainer, TextAreaContainer } from "./styles"
 
-interface TextInputProps {
+interface BaseInputProps {
     name: string
     placeholder: string
     label?: string
     isDisabled?: boolean
 }
 
-export const TextInput: React.FC<TextInputProps> = ({
+export const TextInput: React.FC<BaseInputProps> = ({
     name,
     placeholder,
     label,
@@ -35,5 +35,79 @@ export const TextInput: React.FC<TextInputProps> = ({
             />
             {hasError && <div>{meta.error}</div>}
         </InputContainer>
+    )
+}
+
+export const TextAreaInput: React.FC<BaseInputProps> = ({
+    name,
+    placeholder,
+    label,
+    isDisabled,
+}) => {
+    const [field] = useField(name)
+    const { setFieldValue } = useFormikContext()
+    const [isFocus, setIsFocus] = useState(false)
+
+    const handleChange = (value: string) => {
+        setFieldValue(field.name as never, value)
+    }
+    const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    const textAreaContainerRef = useRef<HTMLDivElement>(null)
+    const isDecreasing = useRef(false)
+
+    useEffect(() => {
+        // textareaResize
+        if (textAreaRef && textAreaRef.current)
+            if (field.value && textAreaRef.current.scrollHeight !== 100) {
+                if (isDecreasing.current)
+                    textAreaRef.current.style.height = "auto"
+
+                textAreaRef.current.style.height =
+                    textAreaRef.current.scrollHeight + "px"
+                isDecreasing.current = false
+            } else if (!field.value)
+                textAreaRef.current.style.height = 100 + "px"
+    }, [field.value])
+
+    useEffect(() => {
+        if (isFocus && textAreaRef.current && textAreaContainerRef.current) {
+            textAreaContainerRef.current.scrollTop =
+                textAreaContainerRef.current.scrollHeight
+            textAreaRef.current.selectionStart =
+                textAreaRef.current.value.length
+            textAreaRef.current.selectionEnd = textAreaRef.current.value.length
+        }
+    }, [isFocus])
+
+    return (
+        <TextAreaContainer>
+            {label && <div>{label}</div>}
+            <div
+                className={`textarea-input-container ${isDisabled ? "disabled" : ""} ${isFocus ? "focus" : ""}`}
+                ref={textAreaContainerRef}
+            >
+                <textarea
+                    name={name}
+                    value={field.value}
+                    placeholder={placeholder}
+                    disabled={isDisabled}
+                    ref={textAreaRef}
+                    rows={1}
+                    onFocus={() => {
+                        setIsFocus(true)
+                    }}
+                    onBlur={() => {
+                        setIsFocus(false)
+                    }}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                        if (e.target.value < field.value)
+                            isDecreasing.current = true
+
+                        handleChange(e.target.value)
+                    }}
+                    data-emoji-input="unicode"
+                />
+            </div>
+        </TextAreaContainer>
     )
 }

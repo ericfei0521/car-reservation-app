@@ -23,7 +23,7 @@ const Home: React.FC<HomeProp> = ({ className }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={className}>
-                <h1>hello</h1>
+                <h1>送機行程</h1>
                 <FlightForm />
             </main>
         </>
