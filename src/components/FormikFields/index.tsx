@@ -25,15 +25,16 @@ export const TextInput: React.FC<BaseInputProps> = ({
 
     return (
         <InputContainer>
-            {label && <div>{label}</div>}
+            {label && <div className="label">{label}</div>}
             <input
                 value={field?.value}
                 name={name}
                 placeholder={placeholder}
                 onChange={handleChange}
                 disabled={isDisabled}
+                className={hasError ? "error" : ""}
             />
-            {hasError && <div>{meta.error}</div>}
+            {hasError && <div className="err-msg">{meta.error}</div>}
         </InputContainer>
     )
 }
@@ -44,9 +45,10 @@ export const TextAreaInput: React.FC<BaseInputProps> = ({
     label,
     isDisabled,
 }) => {
-    const [field] = useField(name)
+    const [field, meta] = useField(name)
     const { setFieldValue } = useFormikContext()
     const [isFocus, setIsFocus] = useState(false)
+    const hasError = Boolean(meta.touched && meta.error)
 
     const handleChange = (value: string) => {
         setFieldValue(field.name as never, value)
@@ -81,9 +83,9 @@ export const TextAreaInput: React.FC<BaseInputProps> = ({
 
     return (
         <TextAreaContainer>
-            {label && <div>{label}</div>}
+            {label && <div className="label">{label}</div>}
             <div
-                className={`textarea-input-container ${isDisabled ? "disabled" : ""} ${isFocus ? "focus" : ""}`}
+                className={`textarea-input-container ${isDisabled ? "disabled" : ""} ${isFocus ? "focus" : ""} ${hasError ? "error" : ""}`}
                 ref={textAreaContainerRef}
             >
                 <textarea
@@ -108,6 +110,7 @@ export const TextAreaInput: React.FC<BaseInputProps> = ({
                     data-emoji-input="unicode"
                 />
             </div>
+            {hasError && <div className="err-msg">{meta.error}</div>}
         </TextAreaContainer>
     )
 }

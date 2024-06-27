@@ -2,39 +2,54 @@ import styled from "styled-components"
 
 export const InputContainer = styled.div`
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    .label {
+        font-size: ${({ theme }) => theme.textScale.h3};
+    }
     input {
         width: 100%;
-        border: 1px solid #d3dae0;
-        padding: 4px;
+        border: 1.5px solid ${({ theme }) => theme.border.disable};
+        padding: 8px;
         box-sizing: border-box;
         border-radius: 4px;
+        font-size: ${({ theme }) => theme.textScale.h3};
         &:focus {
-            border-color: black;
+            border-color: ${({ theme }) => theme.border.normal};
         }
         &:disabled {
-            color: gray;
+            color: ${({ theme }) => theme.color.disable};
+        }
+        &.error {
+            border-color: ${({ theme }) => theme.border.error};
         }
     }
+    .err-msg {
+        font-size: ${({ theme }) => theme.textScale.small};
+        color: ${({ theme }) => theme.color.error};
+    }
 `
-export const TextAreaContainer = styled.div`
-    width: 100%;
+export const TextAreaContainer = styled(InputContainer)`
     .textarea-input-container {
         width: 100%;
         display: flex;
         height: fit-content;
-        border: 1px solid #d3dae0;
-        padding: 4px;
+        border: 1px solid ${({ theme }) => theme.border.disable};
+        padding: 8px;
         max-height: 300px;
         overflow-y: auto;
         box-sizing: border-box;
         border-radius: 4px;
-        &.disabled {
-            color: gray;
+        &:focus {
+            border-color: ${({ theme }) => theme.border.normal};
         }
-        &.focus {
-            border-color: black;
+        &:disabled {
+            color: ${({ theme }) => theme.color.disable};
         }
-
+        &.error {
+            border-color: ${({ theme }) => theme.border.error};
+        }
         textarea {
             width: 100%;
             height: 100px;
@@ -44,6 +59,8 @@ export const TextAreaContainer = styled.div`
             padding: 0;
             outline: none;
             background-color: transparent;
+            font-size: ${({ theme }) => theme.textScale.h3};
+            font-family: inherit;
         }
     }
 `

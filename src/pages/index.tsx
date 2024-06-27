@@ -23,19 +23,41 @@ const Home: React.FC<HomeProp> = ({ className }) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={className}>
-                <h1>送機行程</h1>
-                <FlightForm />
+                <div className="form">
+                    <div className="form-title">送機行程</div>
+                    <FlightForm />
+                </div>
             </main>
         </>
     )
 }
 
 export default styled(Home)`
-    background-color: white;
-    max-width: 768px;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     height: 100vh;
-    width: 100%;
-    padding: 24px 24px 36px;
-    box-sizing: border-box;
+    .form {
+        display: flex;
+        flex-direction: column;
+        max-width: 768px;
+        margin: 0 auto;
+        height: 100%;
+        overflow: hidden;
+        width: 100%;
+        padding-top: 24px;
+        box-sizing: border-box;
+        @media screen and (min-width: 768px) {
+            height: 80vh;
+            border-radius: 4px;
+            box-shadow: 0 0 5px ${({ theme }) => theme.color.disable};
+        }
+        background-color: white;
+    }
+    .form-title {
+        font-size: ${({ theme }) => theme.textScale.h1};
+        text-align: center;
+        margin-bottom: 24px;
+    }
 `

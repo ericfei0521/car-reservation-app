@@ -68,7 +68,7 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
         >
             {() => (
                 <Form className={className}>
-                    <div>送機計畫</div>
+                    <div className="field-title">送機計畫</div>
                     <TextInput
                         name="dpartureAirport"
                         placeholder="下車機場"
@@ -80,7 +80,7 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
                         placeholder="航班編號"
                         label="航班編號"
                     />
-                    <div>旅客資訊</div>
+                    <div className="field-title">旅客資訊</div>
                     <TextInput name="name" placeholder="姓名" label="姓名" />
                     <TextInput
                         name="phoneNumber"
@@ -94,10 +94,12 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
                     />
                     <TextAreaInput
                         name="note"
-                        placeholder="備註"
-                        label="備註"
+                        placeholder="乘車備註"
+                        label="乘車備註"
                     />
-                    <button type="submit">下一步</button>
+                    <div className="button-block">
+                        <button type="submit">下一步</button>
+                    </div>
                 </Form>
             )}
         </Formik>
@@ -107,6 +109,34 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
 export default styled(FlightForm)`
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    align-items: center;
+    justify-content: space-between;
+    max-height: 100%;
+    height: 100%;
+    overflow-y: auto;
+    position: relative;
+    padding: 0 24px;
+    box-sizing: border-box;
+    .field-title {
+        width: 100%;
+        text-align: start;
+        font-size: 20px;
+    }
+    .button-block {
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        position: sticky;
+        background-color: white;
+        padding: 12px 0;
+        display: flex;
+        justify-self: flex-end;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        button {
+            width: 100%;
+            height: 40px;
+            font-size: 20px;
+        }
+    }
 `
