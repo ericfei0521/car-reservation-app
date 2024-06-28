@@ -120,7 +120,12 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
                             label="乘車備註"
                         />
                         <div className="button-block">
-                            <Button type="submit" mode="dark">
+                            <Button
+                                mode="dark"
+                                onClick={() =>
+                                    setModalInfo({ ...modalInfo, show: true })
+                                }
+                            >
                                 下一步
                             </Button>
                         </div>

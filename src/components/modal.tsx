@@ -32,10 +32,8 @@ const Modal = ({
     open,
     onClose,
 }: ModalProps): JSX.Element | null => {
-    if (!open) return null
-
     return (
-        <div className={className} onClick={onClose}>
+        <div className={`${className} ${open ? "show" : ""}`} onClick={onClose}>
             <div className="content" onClick={(e) => e.stopPropagation()}>
                 {children}
             </div>
@@ -55,9 +53,25 @@ export default styled(Modal)`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s ease;
+
     .content {
         min-height: 25%;
         background-color: white;
         padding: 24px;
+        transform: translateY(1000px);
+        transition: transform 0.2s ease;
+    }
+
+    &.show {
+        visibility: visible;
+        opacity: 1;
+        transition: all 0.5s ease;
+        .content {
+            transform: translateY(0px);
+            transition: transform 0.2s ease;
+        }
     }
 `

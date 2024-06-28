@@ -79,7 +79,6 @@ export const Button = styled.button<ButtonProps>`
         mode === "dark" ? "white" : theme.color.normal};
     font-weight: 700;
     &:active {
-        font-size: ${({ theme }) => theme.textScale.normal};
         box-shadow: 1px 1px 5px ${({ theme }) => theme.color.secondary};
     }
 `
