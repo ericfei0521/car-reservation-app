@@ -84,4 +84,7 @@ export const Button = styled.button<ButtonProps>`
     &:active {
         box-shadow: 1px 1px 5px ${({ theme }) => theme.color.secondary};
     }
+    &:disabled {
+        background-color: ${({ theme }) => theme.color.disable};
+    }
 `
