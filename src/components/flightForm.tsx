@@ -83,7 +83,6 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
                 flightNumber: flightNumber,
                 airlineID: airlineID,
                 onSuccess: (data) => {
-                    console.log("kaakaka")
                     if (data && data.length > 0)
                         setModalInfo({
                             ...modalInfo,
