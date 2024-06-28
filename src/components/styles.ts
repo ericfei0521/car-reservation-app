@@ -16,7 +16,7 @@ export const ModalContainer = styled.div`
             text-align: center;
         }
     }
-    &.success {
+    &.center {
         justify-content: center;
         align-items: center;
     }

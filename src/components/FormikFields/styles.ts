@@ -15,10 +15,12 @@ export const InputContainer = styled.div`
         box-sizing: border-box;
         border-radius: 4px;
         font-size: ${({ theme }) => theme.textScale.h3};
+        background-color: transparent;
         &:focus {
             border-color: ${({ theme }) => theme.border.normal};
         }
         &:disabled {
+            background-color: #e6e6e6 !important;
             color: ${({ theme }) => theme.color.disable};
         }
         &.error {
@@ -41,10 +43,11 @@ export const TextAreaContainer = styled(InputContainer)`
         overflow-y: auto;
         box-sizing: border-box;
         border-radius: 4px;
-        &:focus {
+        &.focus {
             border-color: ${({ theme }) => theme.border.normal};
         }
-        &:disabled {
+        &.disabled {
+            background-color: #e6e6e6;
             color: ${({ theme }) => theme.color.disable};
         }
         &.error {

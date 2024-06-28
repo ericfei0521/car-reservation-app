@@ -6,14 +6,14 @@ interface BaseInputProps {
     name: string
     placeholder: string
     label?: string
-    isDisabled?: boolean
+    disabled?: boolean
 }
 
 export const TextInput: React.FC<BaseInputProps> = ({
     name,
     placeholder,
     label,
-    isDisabled,
+    disabled,
 }) => {
     const [field, meta] = useField(name)
     const { setFieldValue } = useFormikContext()
@@ -31,8 +31,9 @@ export const TextInput: React.FC<BaseInputProps> = ({
                 name={name}
                 placeholder={placeholder}
                 onChange={handleChange}
-                disabled={isDisabled}
+                disabled={disabled}
                 className={hasError ? "error" : ""}
+                autoComplete="off"
             />
             {hasError && <div className="err-msg">{meta.error}</div>}
         </InputContainer>
@@ -43,7 +44,7 @@ export const TextAreaInput: React.FC<BaseInputProps> = ({
     name,
     placeholder,
     label,
-    isDisabled,
+    disabled,
 }) => {
     const [field, meta] = useField(name)
     const { setFieldValue } = useFormikContext()
@@ -85,14 +86,14 @@ export const TextAreaInput: React.FC<BaseInputProps> = ({
         <TextAreaContainer>
             {label && <div className="label">{label}</div>}
             <div
-                className={`textarea-input-container ${isDisabled ? "disabled" : ""} ${isFocus ? "focus" : ""} ${hasError ? "error" : ""}`}
+                className={`textarea-input-container ${disabled ? "disabled" : ""} ${isFocus ? "focus" : ""} ${hasError ? "error" : ""}`}
                 ref={textAreaContainerRef}
             >
                 <textarea
                     name={name}
                     value={field.value}
                     placeholder={placeholder}
-                    disabled={isDisabled}
+                    disabled={disabled}
                     ref={textAreaRef}
                     rows={1}
                     onFocus={() => {
