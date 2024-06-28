@@ -59,10 +59,13 @@ export const fetchFlightData = ({
 }
 
 export const fetchToken = async (): Promise<string> => {
-    const parameter = new URLSearchParams({
+    const clientId = String(process.env.ID)
+    const clientSecret = String(process.env.CLIENT_SECRET)
+
+    const parameters = new URLSearchParams({
         grant_type: "client_credentials",
-        client_id: "eric0521bigjohn-afdbd696-28c5-4f9e",
-        client_secret: "9f6e7dc2-fa63-43ec-9287-f66d41904dd4",
+        client_id: clientId,
+        client_secret: clientSecret,
     })
 
     const auth_url =
@@ -74,7 +77,7 @@ export const fetchToken = async (): Promise<string> => {
             "Content-Type": "application/x-www-form-urlencoded",
             "Accept-Encoding": "br,gzip",
         },
-        body: parameter.toString(),
+        body: parameters.toString(),
     })
 
     const data = await response.json()
