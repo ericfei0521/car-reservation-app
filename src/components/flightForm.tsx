@@ -1,10 +1,11 @@
-import React, { useState } from "react"
-import { Formik, Form } from "formik"
+import React, { useState, useRef } from "react"
+import { Formik, Form, FormikProps } from "formik"
 import { TextInput, TextAreaInput, Button } from "./FormikFields"
 import Modal from "@/components/modal"
 import { ModalContainer } from "./styles"
 import styled from "styled-components"
 import Image from "next/image"
+import { fetchFlightData } from "@/services"
 import * as yup from "yup"
 
 interface FormValues {
@@ -44,22 +45,26 @@ const initialValues: FormValues = {
     idNumber: "",
     note: "",
 }
-type ModalType = "success" | "action"
+type ModalType = "success" | "action" | "error"
 
 interface ModalInfo {
     show: boolean
     flightNum: string
     type: ModalType
+    err?: string
 }
 
 interface FlightFormProps {
     className?: string
 }
 const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
+    const formRef = useRef<FormikProps<FormValues>>(null)
+    const [isLoading, setIsloading] = useState(false)
     const [modalInfo, setModalInfo] = useState<ModalInfo>({
-        show: true,
+        show: false,
         flightNum: "",
         type: "action",
+        err: "",
     })
 
     const handleSubmit = (values: FormValues) => {
@@ -72,13 +77,56 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
         const flightNumber: string | null = flightNumberMatch
             ? flightNumberMatch[0]
             : null
-        setModalInfo({ ...modalInfo, show: true })
-        console.log("Form data", airlineID, flightNumber)
+        setIsloading(true)
+        if (airlineID && flightNumber)
+            fetchFlightData({
+                flightNumber: flightNumber,
+                airlineID: airlineID,
+                onSuccess: (data) => {
+                    console.log("kaakaka")
+                    if (data && data.length > 0)
+                        setModalInfo({
+                            ...modalInfo,
+                            type: "success",
+                            show: true,
+                        })
+                    else
+                        setModalInfo({
+                            ...modalInfo,
+                            flightNum: `${airlineID}${flightNumber}`,
+                            type: "action",
+                            show: true,
+                        })
+
+                    setIsloading(false)
+                },
+                onError: (err) => {
+                    setModalInfo({
+                        ...modalInfo,
+                        type: "error",
+                        show: true,
+                        err: err || "",
+                    })
+                    setIsloading(false)
+                },
+            })
+    }
+    const onCloseModal = () => {
+        if (formRef.current) formRef.current.handleReset()
+
+        setModalInfo({
+            ...modalInfo,
+            show: false,
+            flightNum: "",
+            type: "action",
+            err: "",
+        })
     }
 
     return (
         <>
             <Formik
+                innerRef={formRef}
                 initialValues={initialValues}
                 validationSchema={validationSchema}
                 onSubmit={handleSubmit}
@@ -90,56 +138,74 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
                         <TextInput
                             name="dpartureAirport"
                             placeholder="下車機場"
-                            isDisabled
+                            disabled
                             label="下車機場"
                         />
                         <TextInput
                             name="flightNumber"
                             placeholder="航班編號"
                             label="航班編號"
+                            disabled={isLoading}
                         />
                         <div className="field-title">旅客資訊</div>
                         <TextInput
                             name="name"
                             placeholder="姓名"
                             label="姓名"
+                            disabled={isLoading}
                         />
                         <TextInput
                             name="phoneNumber"
                             placeholder="電話"
                             label="電話"
+                            disabled={isLoading}
                         />
                         <TextInput
                             name="idNumber"
                             placeholder="身份證字號/護照編號"
                             label="身份證字號/護照編號"
+                            disabled={isLoading}
                         />
                         <TextAreaInput
                             name="note"
                             placeholder="乘車備註"
                             label="乘車備註"
+                            disabled={isLoading}
                         />
                         <div className="button-block">
                             <Button
                                 mode="dark"
-                                onClick={() =>
-                                    setModalInfo({ ...modalInfo, show: true })
-                                }
+                                type="submit"
+                                disabled={isLoading}
                             >
-                                下一步
+                                {isLoading ? "查詢中" : "下一步"}
                             </Button>
                         </div>
                     </Form>
                 )}
             </Formik>
-            <Modal
-                open={modalInfo.show}
-                onClose={() => setModalInfo({ ...modalInfo, show: false })}
-            >
+            <Modal open={modalInfo.show} onClose={onCloseModal}>
                 <ModalContainer
-                    className={modalInfo.type === "success" ? "success" : ""}
+                    className={modalInfo.type !== "action" ? "center" : ""}
                 >
-                    {modalInfo.type === "success" ? (
+                    {modalInfo.type === "error" && (
+                        <>
+                            <Image
+                                src="/alert.svg"
+                                alt="alert"
+                                width={50}
+                                height={50}
+                            />
+                            <Modal.Text
+                                text={modalInfo.err || "發生錯誤 請洽客服"}
+                                type="h1"
+                            />
+                            <Modal.Button mode="light" onClick={onCloseModal}>
+                                重新填寫
+                            </Modal.Button>
+                        </>
+                    )}
+                    {modalInfo.type === "success" && (
                         <>
                             <Image
                                 src="/checkcircle.svg"
@@ -153,7 +219,8 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
                                 className="title"
                             />
                         </>
-                    ) : (
+                    )}
+                    {modalInfo.type === "action" && (
                         <>
                             <Modal.Text
                                 text={`查不到${modalInfo.flightNum}航班資訊`}
@@ -175,12 +242,7 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
                             >
                                 確認航班資訊、並送出
                             </Modal.Button>
-                            <Modal.Button
-                                mode="light"
-                                onClick={() =>
-                                    setModalInfo({ ...modalInfo, show: false })
-                                }
-                            >
+                            <Modal.Button mode="light" onClick={onCloseModal}>
                                 重新填寫
                             </Modal.Button>
                         </>
