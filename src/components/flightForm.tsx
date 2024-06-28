@@ -6,6 +6,7 @@ import { ModalContainer } from "./styles"
 import styled from "styled-components"
 import Image from "next/image"
 import { fetchFlightData } from "@/services"
+import { debounce } from "@/utils"
 import * as yup from "yup"
 
 interface FormValues {
@@ -67,7 +68,7 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
         err: "",
     })
 
-    const handleSubmit = (values: FormValues) => {
+    const handleSubmit = debounce((values: FormValues) => {
         const airlineIDMatch = values.flightNumber.match(/^[A-Z]{2}/)
         const flightNumberMatch = values.flightNumber.match(/\d+$/)
 
@@ -109,7 +110,8 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
                     setIsloading(false)
                 },
             })
-    }
+    }, 200)
+
     const onCloseModal = () => {
         if (formRef.current) formRef.current.handleReset()
 
