@@ -255,13 +255,13 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
 export default styled(FlightForm)`
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     max-height: 100%;
     height: 100%;
     overflow-y: auto;
     position: relative;
     padding: 0 24px;
     box-sizing: border-box;
+    gap: 8px;
     .field-title {
         width: 100%;
         text-align: start;
@@ -276,7 +276,7 @@ export default styled(FlightForm)`
         background-color: white;
         padding: 12px 0;
         display: flex;
-        justify-self: flex-end;
+        margin-top: auto;
         justify-content: center;
         align-items: center;
         box-sizing: border-box;
