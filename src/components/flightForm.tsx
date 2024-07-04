@@ -69,7 +69,7 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
     })
 
     const handleSubmit = debounce((values: FormValues) => {
-        const airlineIDMatch = values.flightNumber.match(/^[A-Z]{2}/)
+        const airlineIDMatch = values.flightNumber.match(/^[A-Za-z]{2}/)
         const flightNumberMatch = values.flightNumber.match(/\d+$/)
 
         const airlineID: string | null = airlineIDMatch
@@ -82,7 +82,7 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
         if (airlineID && flightNumber)
             fetchFlightData({
                 flightNumber: flightNumber,
-                airlineID: airlineID,
+                airlineID: airlineID.toUpperCase(),
                 onSuccess: (data) => {
                     if (data && data.length > 0)
                         setModalInfo({
@@ -110,6 +110,15 @@ const FlightForm: React.FC<FlightFormProps> = ({ className }) => {
                     setIsloading(false)
                 },
             })
+        else {
+            setIsloading(false)
+            setModalInfo({
+                ...modalInfo,
+                type: "error",
+                show: true,
+                err: "",
+            })
+        }
     }, 200)
 
     const onCloseModal = () => {
